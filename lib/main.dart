@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/firebase_options.dart';
 import 'package:myapp/gps_screen.dart';
+import 'package:myapp/map_distance.dart';
 import 'package:myapp/notification_screen.dart';
 import 'package:myapp/notification_service.dart';
 import 'package:myapp/permission_manager.dart';
@@ -115,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: Text('Firebase Notification'),
             ),
-            ElevatedButton(
+            FilledButton(
               onPressed: () {
                 NotificationService.showNotification(
                   id: 0,
@@ -124,6 +125,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: const Text('Local Notification'),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MapDistance()),
+                );
+              },
+              child: Text('Google Maps'),
             ),
           ],
         ),
