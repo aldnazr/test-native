@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/firebase_options.dart';
 import 'package:myapp/gps_screen.dart';
 import 'package:myapp/notification_screen.dart';
+import 'package:myapp/notification_service.dart';
 import 'package:myapp/permission_manager.dart';
 import 'package:myapp/take_picture_screen.dart';
 
@@ -26,6 +27,8 @@ void main() async {
   // Atur background handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
+  // Local Notification
+  await NotificationService.init();
   // Ambil daftar kamera yang tersedia di perangkat.
   try {
     cameras = await availableCameras();
@@ -110,7 +113,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   MaterialPageRoute(builder: (context) => NotificationScreen()),
                 );
               },
-              child: Text('Notif'),
+              child: Text('Firebase Notification'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                NotificationService.showNotification(
+                  id: 0,
+                  title: 'Halo!',
+                  body: 'Ini adalah notifikasi lokal sederhana.',
+                );
+              },
+              child: const Text('Local Notification'),
             ),
           ],
         ),
