@@ -1,14 +1,30 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/firebase_options.dart';
 import 'package:myapp/gps_screen.dart';
+import 'package:myapp/notification_screen.dart';
 import 'package:myapp/permission_manager.dart';
 import 'package:myapp/take_picture_screen.dart';
 
 late List<CameraDescription> cameras;
 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  print("Menangani pesan di latar belakang: ${message.messageId}");
+}
+
 void main() async {
   // Pastikan bindings Flutter sudah diinisialisasi.
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Inisialisasi Firebase
+  await Firebase.initializeApp();
+
+  // Atur background handler
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // Ambil daftar kamera yang tersedia di perangkat.
   try {
@@ -86,6 +102,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: Text('GPS'),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationScreen()),
+                );
+              },
+              child: Text('Notif'),
             ),
           ],
         ),
