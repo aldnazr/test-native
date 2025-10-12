@@ -2,6 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:myapp/counter_screen.dart';
 import 'package:myapp/firebase_options.dart';
 import 'package:myapp/gps_screen.dart';
 import 'package:myapp/map_distance.dart';
@@ -15,7 +17,6 @@ late List<CameraDescription> cameras;
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  print("Menangani pesan di latar belakang: ${message.messageId}");
 }
 
 void main() async {
@@ -30,13 +31,14 @@ void main() async {
 
   // Local Notification
   await NotificationService.init();
+
   // Ambil daftar kamera yang tersedia di perangkat.
   try {
     cameras = await availableCameras();
   } on CameraException catch (e) {
-    print('Error mengambil daftar kamera: $e');
+    throw Exception(e);
   }
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -134,6 +136,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: Text('Google Maps'),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CounterScreen()),
+                );
+              },
+              child: Text('Test Riverpod'),
             ),
           ],
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'dart:math' show cos, sqrt, asin;
 
 class MapDistance extends StatefulWidget {
   const MapDistance({super.key});
